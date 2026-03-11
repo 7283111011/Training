@@ -667,10 +667,88 @@ const TOTAL=ALL.length;
 const CC=["#1a1a3a","#EF4444","#F97316","#F59E0B","#84CC16","#22C55E"];
 
 let ST={};
+let GHTOKEN=null;
+let GHGISTID=null;
 try{ST=JSON.parse(localStorage.getItem("sqe_flk2_v3")||"{}");}catch{}
+try{GHTOKEN=localStorage.getItem("sqe_gh_token");}catch{}
+try{GHGISTID=localStorage.getItem("sqe_gh_gistid");}catch{}
 let VIEW="dashboard",SUBJ=SUBJECTS[0].id,OPENSEC={},OPENDET={},OPENCASES={},MID=null,MACT=null;
 
-function save(){try{localStorage.setItem("sqe_flk2_v3",JSON.stringify(ST));}catch{}}
+function save(){try{localStorage.setItem("sqe_flk2_v3",JSON.stringify(ST));}catch{}if(GHTOKEN&&GHGISTID)syncToGitHub();}
+function syncToGitHub(){
+  if(!GHTOKEN||!GHGISTID)return;
+  const data=JSON.stringify(ST);
+  fetch("https://api.github.com/gists/"+GHGISTID,{
+    method:"PATCH",
+    headers:{"Authorization":"token "+GHTOKEN,"Content-Type":"application/json"},
+    body:JSON.stringify({files:{"sqe_flk2_progress.json":{content:data}}})
+  }).catch(e=>console.log("GitHub sync skipped (offline?)"));
+}
+function syncFromGitHub(){
+  if(!GHTOKEN||!GHGISTID){alert("GitHub not connected. Set up your token first.");return;}
+  fetch("https://api.github.com/gists/"+GHGISTID,{
+    method:"GET",
+    headers:{"Authorization":"token "+GHTOKEN}
+  })
+  .then(r=>r.json())
+  .then(data=>{
+    const file=data.files?.["sqe_flk2_progress.json"];
+    if(file?.content){
+      try{
+        ST=JSON.parse(file.content);
+        save();updateHeader();
+        if(VIEW==="dashboard")renderDash();else renderMatrix();
+        alert("✓ Progress synced from GitHub!");
+      }catch{alert("Error reading GitHub data");}
+    }else{alert("No progress file found on GitHub");}
+  })
+  .catch(e=>{alert("Failed to sync from GitHub. Check your token and internet.");console.log(e);});
+}
+function setupGitHub(){
+  const token=prompt("Enter your GitHub Personal Access Token:\n(Need a token? Create one at github.com/settings/tokens with 'gist' scope)");
+  if(!token)return;
+  GHTOKEN=token;
+  localStorage.setItem("sqe_gh_token",token);
+  const gistId=prompt("Enter your Gist ID (or leave blank to create a new one):");
+  if(gistId){
+    GHGISTID=gistId;
+    localStorage.setItem("sqe_gh_gistid",gistId);
+    syncToGitHub();
+    alert("✓ GitHub connected!");
+  }else{
+    createNewGist(token);
+  }
+}
+function createNewGist(token){
+  const data=JSON.stringify(ST);
+  fetch("https://api.github.com/gists",{
+    method:"POST",
+    headers:{"Authorization":"token "+token,"Content-Type":"application/json"},
+    body:JSON.stringify({
+      description:"SQE FLK2 Training Matrix Progress",
+      public:false,
+      files:{"sqe_flk2_progress.json":{content:data}}
+    })
+  })
+  .then(r=>r.json())
+  .then(data=>{
+    if(data.id){
+      GHGISTID=data.id;
+      localStorage.setItem("sqe_gh_gistid",data.id);
+      alert("✓ New Gist created! ID: "+data.id+"\n\nYou can view it at: https://gist.github.com/"+data.id);
+    }else{alert("Failed to create Gist. Check your token has 'gist' scope.");}
+  })
+  .catch(e=>{alert("Failed to create Gist");console.log(e);});
+}
+function clearGithub(){
+  if(confirm("Disconnect GitHub sync? (Local data will be preserved)")){
+    GHTOKEN=null;GHGISTID=null;
+    localStorage.removeItem("sqe_gh_token");
+    localStorage.removeItem("sqe_gh_gistid");
+    if(VIEW==="dashboard")renderDash();
+    alert("✓ GitHub disconnected");
+  }
+}
 function td(id){return ST[id]||{confidence:0,activities:{}};}
 function cc(p){return p>60?"#22C55E":p>30?"#F59E0B":p>0?"#EF4444":"#2a2a5a";}
 function days(a,b){return Math.floor((b-a)/86400000);}
@@ -721,7 +799,7 @@ function renderDash(){
   });
   h+='</div><div class="key-card"><div class="sec-title" style="margin-bottom:16px">Activity Key</div><div class="key-grid">';
   ACTS.forEach(a=>{h+=`<div class="key-item"><div class="key-icon" style="background:${a.color}22;border:1px solid ${a.color}44">${a.icon}</div><div><div class="key-name">${a.label}</div><div class="key-s">${a.key==="mcq"?"Log with date, score and notes":"Log a session with date and notes"}</div></div></div>`;});
-  h+=`</div><div class="key-note">Confidence rated 0–5 per topic. Overall confidence = total scored ÷ (topics × 5) × 100%</div><div class="backup-row"><button class="exp-btn" onclick="exportData()">⬇ Export Progress</button><label class="imp-btn">⬆ Import Progress<input type="file" accept=".json" onchange="importData(event)" style="display:none"/></label></div></div>`;
+  h+=`</div><div class="key-note">Confidence rated 0–5 per topic. Overall confidence = total scored ÷ (topics × 5) × 100%</div><div class="backup-row"><button class="exp-btn" onclick="exportData()">⬇ Export Progress</button><label class="imp-btn">⬆ Import Progress<input type="file" accept=".json" onchange="importData(event)" style="display:none"/></label><button class="exp-btn" ${GHTOKEN?"style='background:#1a2a1a;border-color:#2a5a2a;color:#88FF88'":"style='background:#2a1a1a;border-color:#5a2a2a;color:#FF8888'"} onclick="${GHTOKEN?"syncFromGitHub()":"setupGitHub()"}">${GHTOKEN?"☁️ Sync from GitHub":"🔗 Connect GitHub"}</button>${GHTOKEN?`<button class="exp-btn" style="background:#1a1a2a;border-color:#2a2a4a;color:#8888FF;font-size:11px;padding:8px 12px" onclick="clearGithub()">Disconnect</button>`:""}<button class="exp-btn" style="background:#2a1a1a;border-color:#5a2a2a;color:#FF8888" onclick="resetAll()">🗑️ Reset All Data</button></div></div>`;
   document.getElementById("vdash").innerHTML=h;
 }
 
@@ -849,7 +927,36 @@ function importData(e){
   reader.readAsText(file);
   e.target.value="";
 }
-updateHeader();renderDash();
+function resetAll(){
+  if(confirm("⚠️ This will permanently delete all your training progress. Are you sure?")){
+    if(confirm("This action cannot be undone. Click OK again to confirm complete reset.")){
+      ST={};save();updateHeader();
+      if(VIEW==="dashboard")renderDash();else renderMatrix();
+      alert("✓ All progress has been reset.");
+    }
+  }
+}
+function loadGitHubOnStart(){
+  if(GHTOKEN&&GHGISTID){
+    fetch("https://api.github.com/gists/"+GHGISTID,{
+      method:"GET",
+      headers:{"Authorization":"token "+GHTOKEN}
+    })
+    .then(r=>r.json())
+    .then(data=>{
+      const file=data.files?.["sqe_flk2_progress.json"];
+      if(file?.content){
+        try{
+          const ghData=JSON.parse(file.content);
+          ST=ghData;
+          save();
+        }catch{console.log("Error parsing GitHub data");}
+      }
+    })
+    .catch(e=>console.log("GitHub load skipped (offline?)"));
+  }
+}
+updateHeader();loadGitHubOnStart();renderDash();
 </script>
 </body>
 </html>
