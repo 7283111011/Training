@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SQE1 FLK2 Training Matrix</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#0A0A14;color:#E8E8F0;font-family:Georgia,serif;min-height:100vh;}
+button{font-family:Georgia,serif;cursor:pointer;}
+input,textarea{font-family:Georgia,serif;}
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:#0A0A14;}
+::-webkit-scrollbar-thumb{background:#2a2a5a;border-radius:3px;}
+input[type=date]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:0.5;}
+#header{background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);border-bottom:1px solid #2a2a4a;padding:0 16px;}
+#header-inner{max-width:1200px;margin:0 auto;}
+#header-top{padding:20px 0 0;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;}
+.hlabel{font-size:11px;letter-spacing:.2em;color:#7C7CCC;text-transform:uppercase;margin-bottom:4px;}
+h1{font-size:22px;font-weight:normal;color:#E8E8FF;letter-spacing:-.5px;}
+.hsub{font-size:12px;color:#6666AA;margin-top:4px;}
+.bigpct{font-size:30px;font-weight:bold;text-align:right;}
+.bigpct-lbl{font-size:11px;color:#6666AA;}
+#pbars{display:grid;grid-template-columns:1fr;gap:10px;padding:12px 0 16px;}
+.pb-lbl{display:flex;justify-content:space-between;margin-bottom:4px;}
+.pb-lbl span{font-size:11px;color:#6666AA;text-transform:uppercase;letter-spacing:.1em;}
+.pb-lbl em{font-size:11px;color:#A0A0CC;font-style:normal;}
+.pb-track{height:6px;background:#1a1a3a;border-radius:3px;}
+.pb-fill{height:100%;border-radius:3px;transition:width .4s;}
+#nav{display:flex;border-top:1px solid #1a1a3a;}
+.nav-btn{background:none;border:none;color:#6666AA;padding:10px 20px;font-size:13px;letter-spacing:.05em;border-bottom:2px solid transparent;}
+.nav-btn.active{color:#8B8BFF;border-bottom-color:#8B8BFF;}
+#main{max-width:1200px;margin:0 auto;padding:16px;}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
+.stat-card{background:#13132a;border:1px solid #1e1e3a;border-radius:12px;padding:14px 16px;}
+.stat-lbl{font-size:11px;color:#6666AA;text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px;}
+.stat-val{font-size:26px;font-weight:bold;line-height:1;}
+.stat-sub{font-size:12px;color:#4a4a7a;margin-top:4px;}
+.sec-title{font-size:13px;font-weight:normal;color:#8888BB;letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px;border-bottom:1px solid #1e1e3a;padding-bottom:10px;}
+.subj-grid{display:grid;grid-template-columns:1fr;gap:12px;}
+.subj-card{background:#13132a;border:1px solid #1e1e3a;border-radius:12px;padding:14px 16px;cursor:pointer;transition:border-color .2s;}
+.subj-card:hover{border-color:#3a3a6a;}
+.subj-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.subj-name{font-size:13px;font-weight:bold;margin-bottom:2px;}
+.subj-s{font-size:11px;color:#4a4a7a;}
+.subj-pct{font-size:28px;font-weight:bold;}
+.subj-hint{margin-top:10px;font-size:11px;color:#4a4a7a;}
+.key-card{background:#13132a;border:1px solid #1e1e3a;border-radius:12px;padding:14px 16px;margin-top:20px;}
+.key-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.key-item{display:flex;align-items:center;gap:10px;}
+.key-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.key-name{font-size:13px;color:#C0C0E0;}
+.key-s{font-size:11px;color:#4a4a7a;}
+.key-note{margin-top:16px;font-size:12px;color:#4a4a7a;border-top:1px solid #1e1e3a;padding-top:12px;}
+#stabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;}
+.stab{border-radius:8px;border:1px solid #1e1e3a;background:#13132a;color:#6666AA;padding:8px 14px;font-size:12px;transition:all .2s;}
+#mhdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
+#mtitle{font-size:20px;font-weight:normal;}
+#msub{font-size:12px;color:#4a4a7a;margin-top:4px;}
+#mpct{font-size:28px;font-weight:bold;}
+.secblock{margin-bottom:12px;}
+.sechdr{width:100%;background:#13132a;border:1px solid #1e1e3a;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;text-align:left;color:#C0C0E0;font-size:14px;border-radius:10px;}
+.sechdr.open{border-radius:10px 10px 0 0;}
+.sechr{display:flex;gap:12px;align-items:center;}
+.sectopics{border:1px solid #1e1e3a;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;}
+.trow{border-bottom:1px solid #1a1a3a;}
+.trow:last-child{border-bottom:none;}
+.trow-main{padding:12px 18px;display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap;}
+.ttext{flex:1;min-width:200px;font-size:13px;color:#B0B0D0;line-height:1.5;padding-top:2px;cursor:pointer;}
+.cgrp{display:flex;gap:3px;align-items:center;flex-shrink:0;}
+.clbl{font-size:10px;color:#4a4a7a;margin-right:4px;white-space:nowrap;}
+.cbtn{width:22px;height:22px;border-radius:4px;border:none;font-size:10px;color:white;font-weight:bold;}
+.agrp{display:flex;gap:4px;flex-shrink:0;}
+.abtn{width:28px;height:28px;border-radius:6px;border:1px solid #1a1a3a;background:transparent;font-size:13px;position:relative;display:flex;align-items:center;justify-content:center;}
+.abadge{position:absolute;top:-4px;right:-4px;border-radius:50%;width:14px;height:14px;font-size:9px;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#fff;}
+.tdetail{padding:0 18px 12px;}
+.dlbl{font-size:11px;margin-bottom:4px;}
+.dentry{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:#6666AA;padding:2px 8px;background:#0A0A14;border-radius:4px;margin-bottom:2px;}
+.ddel{background:none;border:none;color:#EF4444;font-size:13px;padding:0 2px;}
+#moverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:1000;align-items:center;justify-content:center;padding:20px;}
+#moverlay.show{display:flex;}
+#mbox{background:#13132a;border:1px solid #2a2a5a;border-radius:12px;padding:28px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;}
+.mtlbl{font-size:11px;text-transform:uppercase;letter-spacing:.15em;margin-bottom:6px;}
+.mtopic{font-size:14px;color:#C0C0E0;line-height:1.5;margin-bottom:16px;}
+.flbl{font-size:11px;color:#6666AA;display:block;margin-bottom:4px;}
+.finput{width:100%;background:#0A0A1A;border:1px solid #2a2a5a;border-radius:6px;color:#E8E8F0;padding:8px 10px;font-size:14px;font-family:Georgia,serif;}
+.fgrp{margin-bottom:12px;}
+.fgrpl{margin-bottom:16px;}
+.prevlbl{font-size:11px;color:#6666AA;margin-bottom:6px;}
+.prevrow{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#8888BB;padding:4px 0;border-bottom:1px solid #1a1a3a;}
+.prevdel{background:none;border:none;color:#EF4444;font-size:14px;padding:0 4px;}
+.mbtns{display:flex;gap:10px;margin-top:16px;}
+.mok{flex:1;border:none;border-radius:8px;color:#fff;padding:10px;font-size:14px;font-family:Georgia,serif;}
+.mcancel{flex:1;background:#1a1a3a;border:1px solid #2a2a5a;border-radius:8px;color:#8888BB;padding:10px;font-size:14px;font-family:Georgia,serif;}
+@media(max-width:600px){.trow-main{flex-wrap:wrap;}.ttext{min-width:100%;}.cgrp,.agrp{flex-shrink:0;}}
+@media(min-width:640px){
+  #main{padding:24px;}
+  .stat-grid{grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px;}
+  .stat-card{padding:20px 24px;}
+  .stat-val{font-size:32px;}
+  .subj-grid{grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;}
+  .subj-card{padding:20px 24px;}
+  .key-grid{grid-template-columns:repeat(auto-fit,minmax(180px,1fr));}
+  .key-card{padding:20px 24px;margin-top:32px;}
+  #pbars{grid-template-columns:1fr 1fr;gap:16px;padding:16px 0 20px;}
+  h1{font-size:26px;}
+  .bigpct{font-size:36px;}
+  #header{padding:0 24px;}
+}
+
+
+.backup-row{display:flex;gap:10px;margin-top:16px;padding-top:12px;border-top:1px solid #1e1e3a;flex-wrap:wrap;}
+.exp-btn{background:#1a1a3a;border:1px solid #2a2a5a;border-radius:8px;color:#8B8BFF;padding:9px 16px;font-size:13px;cursor:pointer;flex:1;min-width:120px;}
+.exp-btn:hover{background:#2a2a5a;}
+.imp-btn{background:#1a1a3a;border:1px solid #2a2a5a;border-radius:8px;color:#8B8BFF;padding:9px 16px;font-size:13px;cursor:pointer;flex:1;min-width:120px;text-align:center;display:block;}
+.imp-btn:hover{background:#2a2a5a;}
+
+.cases-panel{padding:4px 18px 10px 18px;background:inherit;}
+.cases-toggle{background:none;border:none;font-size:11px;color:#4a6a8a;padding:2px 0;cursor:pointer;display:flex;align-items:center;gap:4px;letter-spacing:.05em;}
+.cases-toggle:hover{color:#6a9aba;}
+.cases-list{margin-top:6px;padding:8px 12px;background:#080816;border-radius:6px;border-left:2px solid #1e3a5a;}
+.case-item{font-size:11px;color:#7a9aba;padding:2px 0;font-style:italic;}
+.case-item::before{content:"⚖ ";font-style:normal;}
+</style>
+</head>
+<body>
+<div id="header">
+  <div id="header-inner">
+    <div id="header-top">
+      <div>
+        <div class="hlabel">SQE1 Assessment Specification</div>
+        <h1>FLK2 Training Matrix</h1>
+        <div class="hsub" id="hsub"></div>
+      </div>
+      <div>
+        <div class="bigpct" id="overall-pct">0%</div>
+        <div class="bigpct-lbl">Overall Confidence</div>
+      </div>
+    </div>
+    <div id="pbars">
+      <div>
+        <div class="pb-lbl"><span>Confidence Progress</span><em id="cpct-lbl">0%</em></div>
+        <div class="pb-track"><div class="pb-fill" id="cbar" style="width:0%;background:linear-gradient(90deg,#6366F1,#8B5CF6)"></div></div>
+      </div>
+      <div>
+        <div class="pb-lbl"><span>Time Elapsed</span><em id="tlbl"></em></div>
+        <div class="pb-track"><div class="pb-fill" id="tbar" style="width:0%;background:linear-gradient(90deg,#0EA5E9,#06B6D4)"></div></div>
+      </div>
+    </div>
+    <div id="nav">
+      <button class="nav-btn active" onclick="showView('dashboard')">Dashboard</button>
+      <button class="nav-btn" onclick="showView('matrix')">Training Matrix</button>
+    </div>
+  </div>
+</div>
+<div id="main">
+  <div id="vdash"></div>
+  <div id="vmatrix" style="display:none"></div>
+</div>
+<div id="moverlay" onclick="if(event.target===this)closeModal()">
+  <div id="mbox">
+    <div class="mtlbl" id="mtlbl"></div>
+    <div class="mtopic" id="mtopic"></div>
+    <div class="fgrp">
+      <label class="flbl">DATE COMPLETED</label>
+      <input type="date" id="mdate" class="finput" min="2026-03-10" max="2026-07-10"/>
+    </div>
+    <div class="fgrp" id="mscore-grp" style="display:none">
+      <label class="flbl">SCORE (optional, e.g. 7/10 or 70%)</label>
+      <input type="text" id="mscore" class="finput" placeholder="e.g. 7/10 or 70%"/>
+    </div>
+    <div class="fgrpl">
+      <label class="flbl">NOTES (optional)</label>
+      <textarea id="mnote" class="finput" rows="2" style="resize:vertical"></textarea>
+    </div>
+    <div id="mprev"></div>
+    <div class="mbtns">
+      <button class="mok" id="mok" onclick="submitLog()">Log Session</button>
+      <button class="mcancel" onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+<script>
+const SD=new Date("2026-03-10"),ED=new Date("2026-07-10");
+const ACTS=[
+  {key:"audio",label:"Audio",icon:"🎧",color:"#7C3AED"},
+  {key:"visual",label:"Visual",icon:"👁️",color:"#0891B2"},
+  {key:"writing",label:"Writing",icon:"✍️",color:"#059669"},
+  {key:"reading",label:"Reading",icon:"📖",color:"#D97706"},
+  {key:"mcq",label:"MCQ",icon:"✅",color:"#E11D48"},
+];
+const SUBJECTS=[
+  {id:"plp",name:"Property Law and Practice",color:"#7C3AED",sections:[
+    {id:"plp_fr",name:"Freehold – Investigation of Title",topics:[
+      {id:"plp_f1",text:"Key elements and structure of freehold property transactions"},
+      {id:"plp_f2",text:"Process of analysing Land Registry official copy entries"},
+      {id:"plp_f3",text:"Process of analysing an epitome of title and deducing ownership"},
+      {id:"plp_f4",text:"Issues arising from investigation of title and further action required"},
+      {id:"plp_f5",text:"Purpose and process of reporting to the client"},
+    ]},
+    {id:"plp_se",name:"Pre-Contract Searches and Enquiries",topics:[
+      {id:"plp_s1",text:"Range and purpose of making searches and raising enquiries"},
+      {id:"plp_s2",text:"Who would make the searches and raise enquiries"},
+      {id:"plp_s3",text:"Results of searches and enquiries"},
+    ]},
+    {id:"plp_fi",name:"Finance",topics:[
+      {id:"plp_fin1",text:"Sources of finance for a property transaction"},
+      {id:"plp_fin2",text:"Types of mortgage"},
+    ]},
+    {id:"plp_le",name:"Acting for a Lender",topics:[
+      {id:"plp_l1",text:"Lender's requirements"},
+      {id:"plp_l2",text:"Purpose of a certificate of title"},
+    ]},
+    {id:"plp_ex",name:"Preparation for and Exchange of Contracts",topics:[
+      {id:"plp_e1",text:"Key conditions in Standard Conditions of Sale"},
+      {id:"plp_e2",text:"Key conditions in Standard Commercial Property Conditions"},
+      {id:"plp_e3",text:"Purpose of and matters covered by special conditions"},
+      {id:"plp_e4",text:"Methods of holding a deposit: stakeholder and agent"},
+      {id:"plp_e5",text:"Insurance and risk on exchange"},
+      {id:"plp_e6",text:"Basics of VAT in a contract"},
+      {id:"plp_e7",text:"Timing for issuing certificate of title to a lender"},
+      {id:"plp_e8",text:"Practice, method and authority to exchange"},
+      {id:"plp_e9",text:"Consequences of exchange"},
+    ]},
+    {id:"plp_pc",name:"Pre-Completion",topics:[
+      {id:"plp_pc1",text:"Form of transfer deed and formalities for execution"},
+      {id:"plp_pc2",text:"Pre-completion searches"},
+      {id:"plp_pc3",text:"Pre-completion steps"},
+    ]},
+    {id:"plp_co",name:"Completion and Post-Completion",topics:[
+      {id:"plp_co1",text:"Methods and effect of completion"},
+      {id:"plp_co2",text:"Post-completion steps"},
+    ]},
+    {id:"plp_re",name:"Remedies for Delayed Completion",topics:[
+      {id:"plp_r1",text:"Common law damages for delayed completion"},
+      {id:"plp_r2",text:"Contractual compensation for delayed completion"},
+      {id:"plp_r3",text:"Notice to complete"},
+      {id:"plp_r4",text:"Rescission"},
+    ]},
+    {id:"plp_lc",name:"Leasehold – Structure and Content of a Lease",topics:[
+      {id:"plp_lc1",text:"Repair covenants in leases"},
+      {id:"plp_lc2",text:"Insurance covenants in leases"},
+      {id:"plp_lc3",text:"Alterations covenants in leases"},
+      {id:"plp_lc4",text:"User and planning covenants in leases"},
+      {id:"plp_lc5",text:"Rent and rent review provisions"},
+      {id:"plp_lc6",text:"Alienation covenants in leases"},
+      {id:"plp_lc7",text:"Options for the term of a lease including break clauses"},
+      {id:"plp_lc8",text:"Code for Leasing Business Premises"},
+    ]},
+    {id:"plp_lg",name:"Leasehold – Grant of Lease or Underlease",topics:[
+      {id:"plp_lg1",text:"Drafting the lease"},
+      {id:"plp_lg2",text:"Purpose of an agreement for lease"},
+      {id:"plp_lg3",text:"Deduction and investigation of title for grant"},
+      {id:"plp_lg4",text:"Pre-contract enquiries and searches for grant"},
+      {id:"plp_lg5",text:"Pre-completion formalities for grant"},
+      {id:"plp_lg6",text:"Completion and post-completion steps for grant"},
+    ]},
+    {id:"plp_la",name:"Leasehold – Assignment of a Lease",topics:[
+      {id:"plp_la1",text:"Deduction and investigation of title for assignment"},
+      {id:"plp_la2",text:"Pre-contract enquiries and searches for assignment"},
+      {id:"plp_la3",text:"Landlord's consent for assignment"},
+      {id:"plp_la4",text:"Deed of assignment and covenants for title"},
+      {id:"plp_la5",text:"Pre-completion formalities for assignment"},
+      {id:"plp_la6",text:"Authorised guarantee agreement"},
+      {id:"plp_la7",text:"Completion and post-completion steps for assignment"},
+    ]},
+    {id:"plp_li",name:"Licence to Assign / Underlet",topics:[
+      {id:"plp_li1",text:"Purpose of and who prepares the draft licence"},
+      {id:"plp_li2",text:"Privity of contract and how the licence deals with this"},
+      {id:"plp_li3",text:"Key provisions in the licence"},
+    ]},
+    {id:"plp_cv",name:"Leasehold Covenants",topics:[
+      {id:"plp_cov1",text:"Liability on covenants in leases granted before 1 January 1996"},
+      {id:"plp_cov2",text:"Liability on covenants in leases granted on or after 1 January 1996"},
+    ]},
+    {id:"plp_br",name:"Remedies for Breach of Leasehold Covenant",topics:[
+      {id:"plp_br1",text:"Action in debt for breach of leasehold covenant"},
+      {id:"plp_br2",text:"Forfeiture as remedy for breach"},
+      {id:"plp_br3",text:"Commercial Rent Arrears Recovery (CRAR)"},
+      {id:"plp_br4",text:"Pursuing guarantors and/or rent deposit"},
+      {id:"plp_br5",text:"Specific performance as remedy"},
+      {id:"plp_br6",text:"Damages as remedy"},
+      {id:"plp_br7",text:"Self-help / Jervis v Harris clause"},
+    ]},
+    {id:"plp_te",name:"Termination of a Lease",topics:[
+      {id:"plp_t1",text:"Effluxion of time"},
+      {id:"plp_t2",text:"Surrender of a lease"},
+      {id:"plp_t3",text:"Merger of a lease"},
+    ]},
+    {id:"plp_54",name:"Security of Tenure – Landlord and Tenant Act 1954 Part II",topics:[
+      {id:"plp_541",text:"Application of the 1954 Act"},
+      {id:"plp_542",text:"Renewal of lease by the tenant"},
+      {id:"plp_543",text:"Termination by the landlord"},
+      {id:"plp_544",text:"Landlord's grounds of opposition"},
+      {id:"plp_545",text:"Terms of new lease under 1954 Act"},
+      {id:"plp_546",text:"Availability of compensation under 1954 Act"},
+    ]},
+    {id:"plp_pl",name:"Planning Law",topics:[
+      {id:"plp_pl1",text:"Statutory definition of Development"},
+      {id:"plp_pl2",text:"Matters that do and do not constitute Development"},
+      {id:"plp_pl3",text:"Matters that do not require express planning permission"},
+      {id:"plp_pl4",text:"Building regulations control"},
+      {id:"plp_pl5",text:"Enforcement: time limits and range of LPA enforcement powers"},
+    ]},
+    {id:"plp_tx",name:"Taxation – Property",topics:[
+      {id:"plp_tx1",text:"SDLT: basis of charge for residential property in England"},
+      {id:"plp_tx2",text:"LTT: basis of charge in Wales"},
+      {id:"plp_tx3",text:"SDLT/LTT: basis of charge for non-residential freehold"},
+      {id:"plp_tx4",text:"VAT: what constitutes a taxable supply"},
+      {id:"plp_tx5",text:"VAT: differences between standard, exempt and zero-rated supplies"},
+      {id:"plp_tx6",text:"VAT: option to tax and its effect"},
+      {id:"plp_tx7",text:"Capital Gains Tax: basis of charge"},
+      {id:"plp_tx8",text:"Capital Gains Tax: Private Residence Relief"},
+    ]},
+  ]},
+  {id:"wae",name:"Wills and Administration of Estates",color:"#0891B2",sections:[
+    {id:"wae_va",name:"Validity of Wills and Codicils",topics:[
+      {id:"wae_v1",text:"Testamentary capacity"},
+      {id:"wae_v2",text:"Duress and undue influence"},
+      {id:"wae_v3",text:"Formal requirements for a valid will"},
+    ]},
+    {id:"wae_pr",name:"Personal Representatives",topics:[
+      {id:"wae_pr1",text:"Appointment of executors"},
+      {id:"wae_pr2",text:"Renunciation and reservation of power"},
+    ]},
+    {id:"wae_al",name:"Alterations and Amendments to Wills",topics:[
+      {id:"wae_a1",text:"Effect of alterations made to wills before and after execution"},
+      {id:"wae_a2",text:"Use of codicils"},
+    ]},
+    {id:"wae_rv",name:"Revocation of Wills",topics:[
+      {id:"wae_rv1",text:"Methods of revocation"},
+      {id:"wae_rv2",text:"Effect of marriage and divorce on revocation"},
+    ]},
+    {id:"wae_in",name:"Interpretation of Wills",topics:[
+      {id:"wae_i1",text:"Effect of different types of gift"},
+      {id:"wae_i2",text:"Failure of gifts"},
+    ]},
+    {id:"wae_it",name:"Intestacy Rules",topics:[
+      {id:"wae_int1",text:"Section 46 of the Administration of Estates Act 1925"},
+      {id:"wae_int2",text:"The statutory trusts on intestacy"},
+    ]},
+    {id:"wae_ou",name:"Property Passing Outside the Estate",topics:[
+      {id:"wae_o1",text:"Joint property passing outside the estate"},
+      {id:"wae_o2",text:"Life policies passing outside the estate"},
+      {id:"wae_o3",text:"Pension scheme benefits passing outside the estate"},
+      {id:"wae_o4",text:"Trust property passing outside the estate"},
+    ]},
+    {id:"wae_gr",name:"Grants of Representation",topics:[
+      {id:"wae_g1",text:"Need for grant of representation"},
+      {id:"wae_g2",text:"Relevant provisions of the Non-Contentious Probate Rules"},
+      {id:"wae_g3",text:"Application procedure for grant"},
+      {id:"wae_g4",text:"Valuation of assets and liabilities"},
+      {id:"wae_g5",text:"Excepted estates"},
+      {id:"wae_g6",text:"Methods of funding initial payment of Inheritance Tax"},
+      {id:"wae_g7",text:"Burden and incidence of Inheritance Tax"},
+    ]},
+    {id:"wae_ad",name:"Administration of Estates",topics:[
+      {id:"wae_ad1",text:"Duties of personal representatives"},
+      {id:"wae_ad2",text:"Liabilities and protection of personal representatives"},
+      {id:"wae_ad3",text:"Sale of assets to raise funds for funeral expenses, tax, debts and legacies"},
+      {id:"wae_ad4",text:"Distribution of the estate"},
+    ]},
+    {id:"wae_75",name:"Claims under Inheritance (Provision for Family and Dependants) Act 1975",topics:[
+      {id:"wae_751",text:"Time limit for 1975 Act claims"},
+      {id:"wae_752",text:"Applicants under the 1975 Act"},
+      {id:"wae_753",text:"Grounds for 1975 Act claims"},
+    ]},
+    {id:"wae_ih",name:"Inheritance Tax",topics:[
+      {id:"wae_iht1",text:"Lifetime transfers: immediately chargeable and potentially exempt"},
+      {id:"wae_iht2",text:"Transfers on death"},
+      {id:"wae_iht3",text:"IHT exemptions and reliefs"},
+      {id:"wae_iht4",text:"Scope of IHT anti-avoidance provisions"},
+    ]},
+    {id:"wae_cg",name:"Income and Capital Gains Tax – Administration Period",topics:[
+      {id:"wae_it1",text:"Personal representatives' liability to Income Tax during administration"},
+      {id:"wae_it2",text:"Personal representatives' liability to CGT during administration"},
+      {id:"wae_it3",text:"Beneficiaries' liability to CGT on inherited assets"},
+    ]},
+  ]},
+  {id:"sa",name:"Solicitors Accounts",color:"#059669",sections:[
+    {id:"sa_cm",name:"Client Money",topics:[
+      {id:"sa_cm1",text:"Definition of client money"},
+      {id:"sa_cm2",text:"Requirement to pay client money into a client account"},
+      {id:"sa_cm3",text:"Circumstances in which client money may be withheld from a client account"},
+      {id:"sa_cm4",text:"Repayment of client money"},
+      {id:"sa_cm5",text:"Accounting entries for client money"},
+    ]},
+    {id:"sa_ca",name:"Client Account",topics:[
+      {id:"sa_ca1",text:"Meaning and name of client account"},
+      {id:"sa_ca2",text:"Obligation not to use client account to provide banking facilities"},
+      {id:"sa_ca3",text:"Withdrawals from client account and accounting entries"},
+    ]},
+    {id:"sa_in",name:"Interest",topics:[
+      {id:"sa_int1",text:"Requirement to pay interest on client money"},
+      {id:"sa_int2",text:"Accounting entries for interest"},
+    ]},
+    {id:"sa_br",name:"Breach of SRA Accounts Rules",topics:[
+      {id:"sa_br1",text:"Duty to correct breaches of SRA Accounts Rules promptly on discovery"},
+      {id:"sa_br2",text:"Accounting entries for breach corrections"},
+    ]},
+    {id:"sa_re",name:"Records and Ledgers",topics:[
+      {id:"sa_rec1",text:"Disbursements using agency and principal methods"},
+      {id:"sa_rec2",text:"Transfers in client accounts"},
+      {id:"sa_rec3",text:"Submission, reduction and payment of bills including VAT element"},
+      {id:"sa_rec4",text:"Accounting entries for bills and disbursements"},
+      {id:"sa_rec5",text:"Requirement to carry out reconciliation of client accounts"},
+      {id:"sa_rec6",text:"Requirement to keep a record of bills"},
+    ]},
+    {id:"sa_ot",name:"Other Account Matters",topics:[
+      {id:"sa_oth1",text:"Operation of joint account"},
+      {id:"sa_oth2",text:"Operation of a client's own account"},
+      {id:"sa_oth3",text:"Third-party managed accounts"},
+      {id:"sa_oth4",text:"Obtaining and delivery of accountants' reports"},
+      {id:"sa_oth5",text:"Storage and retention of accounting records"},
+    ]},
+  ]},
+  {id:"ll",name:"Land Law",color:"#D97706",sections:[
+    {id:"ll_na",name:"Nature of Land",topics:[
+      {id:"ll_n1",text:"Distinction between real property and personal property"},
+      {id:"ll_n2",text:"How to acquire and transfer legal estates"},
+      {id:"ll_n3",text:"How to acquire and dispose of legal and equitable interests in land"},
+      {id:"ll_n4",text:"Methods to protect and enforce third party interests"},
+      {id:"ll_n5",text:"Different ways in which land can be held"},
+      {id:"ll_n6",text:"Legal formalities required to create and transfer interests and estates in land"},
+    ]},
+    {id:"ll_ti",name:"Title to Land",topics:[
+      {id:"ll_t1",text:"Registration of title: estates that can be substantively registered"},
+      {id:"ll_t2",text:"Registration of title: how to protect interests"},
+      {id:"ll_t3",text:"Interests that override registration"},
+      {id:"ll_t4",text:"Interests that need to be protected on the register"},
+      {id:"ll_t5",text:"Core principles of unregistered title: role of title deeds"},
+      {id:"ll_t6",text:"Land Charges in unregistered title"},
+      {id:"ll_t7",text:"Continuing role of doctrine of notice in unregistered title"},
+    ]},
+    {id:"ll_co",name:"Co-ownership and Trusts",topics:[
+      {id:"ll_co1",text:"Differences between joint tenants and tenants in common in law and equity"},
+      {id:"ll_co2",text:"Rule of survivorship"},
+      {id:"ll_co3",text:"Severance of joint tenancies"},
+      {id:"ll_co4",text:"Solving disagreements between co-owners under ss.14 and 15 TOLATA 1996"},
+    ]},
+    {id:"ll_pr",name:"Proprietary Rights",topics:[
+      {id:"ll_pr1",text:"Essential characteristics of easements"},
+      {id:"ll_pr2",text:"Methods for creation of easements"},
+      {id:"ll_pr3",text:"Rules for passing of benefit and burden of freehold covenants"},
+      {id:"ll_pr4",text:"Mortgages: enforceability of terms"},
+      {id:"ll_pr5",text:"Mortgages: priority of mortgages"},
+      {id:"ll_pr6",text:"Mortgages: lender's powers and duties"},
+      {id:"ll_pr7",text:"Mortgages: protection of mortgagors and third parties"},
+    ]},
+    {id:"ll_le",name:"Leases (Land Law)",topics:[
+      {id:"ll_l1",text:"Relationship between landlord and tenant in a lease"},
+      {id:"ll_l2",text:"Essential characteristics of a lease including difference from a licence"},
+      {id:"ll_l3",text:"Privity of contract and privity of estate"},
+      {id:"ll_l4",text:"Rules for passing of benefit and burden of leasehold covenants and enforceability"},
+      {id:"ll_l5",text:"Purpose and effect of an alienation covenant"},
+      {id:"ll_l6",text:"Remedies for breach of leasehold covenants including forfeiture"},
+      {id:"ll_l7",text:"Different ways a lease can be terminated"},
+    ]},
+  ]},
+  {id:"tr",name:"Trusts Law",color:"#DC2626",sections:[
+    {id:"tr_cr",name:"Creation of Express Trusts",topics:[
+      {id:"tr_c1",text:"Three certainties: intention – fixed interest trusts"},
+      {id:"tr_c2",text:"Three certainties: intention – discretionary trusts"},
+      {id:"tr_c3",text:"Three certainties: subject matter"},
+      {id:"tr_c4",text:"Three certainties: objects"},
+      {id:"tr_c5",text:"Formalities to create express inter vivos trusts"},
+      {id:"tr_c6",text:"Constitution of express inter vivos trusts"},
+      {id:"tr_c7",text:"Exceptions to rule that equity will not assist a volunteer"},
+    ]},
+    {id:"tr_be",name:"Beneficial Entitlement",topics:[
+      {id:"tr_b1",text:"Fixed interests"},
+      {id:"tr_b2",text:"Discretionary interests"},
+      {id:"tr_b3",text:"Vested interests"},
+      {id:"tr_b4",text:"Contingent interests"},
+      {id:"tr_b5",text:"Rule in Saunders v Vautier"},
+    ]},
+    {id:"tr_ch",name:"Charitable vs Non-Charitable Purpose Trusts",topics:[
+      {id:"tr_ch1",text:"Distinction between charitable trusts and non-charitable purpose trusts"},
+    ]},
+    {id:"tr_rt",name:"Resulting Trusts",topics:[
+      {id:"tr_rt1",text:"How resulting trusts arise"},
+      {id:"tr_rt2",text:"When resulting trusts are and are not presumed"},
+    ]},
+    {id:"tr_fh",name:"Trusts of the Family Home",topics:[
+      {id:"tr_fh1",text:"Common intention constructive trust: legal title in both parties' names"},
+      {id:"tr_fh2",text:"Common intention constructive trust: legal title in sole party's name"},
+      {id:"tr_fh3",text:"Express declaration or agreement as to equitable ownership"},
+      {id:"tr_fh4",text:"Direct and indirect contributions to family home"},
+      {id:"tr_fh5",text:"Requirements to establish proprietary estoppel"},
+    ]},
+    {id:"tr_st",name:"Liability of Strangers to the Trust",topics:[
+      {id:"tr_st1",text:"Establishing recipient liability (knowing receipt)"},
+      {id:"tr_st2",text:"Establishing accessory liability (dishonest assistance)"},
+    ]},
+    {id:"tr_fi",name:"Fiduciary Relationship and Obligations",topics:[
+      {id:"tr_fi1",text:"Duty not to profit from fiduciary position"},
+      {id:"tr_fi2",text:"Trustees not to purchase trust property"},
+      {id:"tr_fi3",text:"Fiduciary not to put himself in a position of conflict of interest and duty"},
+    ]},
+    {id:"tr_tu",name:"Trustees",topics:[
+      {id:"tr_tu1",text:"Who can be a trustee; appointment, removal and retirement"},
+      {id:"tr_tu2",text:"Trustees' duty of care"},
+      {id:"tr_tu3",text:"Trustees' duty to invest and powers in relation to investment"},
+      {id:"tr_tu4",text:"Trustees' statutory powers of maintenance"},
+      {id:"tr_tu5",text:"Trustees' statutory powers of advancement"},
+    ]},
+    {id:"tr_li",name:"Trustees' Liability",topics:[
+      {id:"tr_tl1",text:"Breach of trust"},
+      {id:"tr_tl2",text:"Measure of liability for breach of trust"},
+      {id:"tr_tl3",text:"Protection of trustees"},
+      {id:"tr_tl4",text:"Limitation period for breach of trust"},
+    ]},
+    {id:"tr_rem",name:"Equitable Remedies and Tracing",topics:[
+      {id:"tr_rem1",text:"Nature of equitable remedies"},
+      {id:"tr_rem2",text:"Availability of tracing in equity"},
+    ]},
+  ]},
+  {id:"cl",name:"Criminal Liability",color:"#B45309",sections:[
+    {id:"cl_pe",name:"Offences Against the Person",topics:[
+      {id:"cl_p1",text:"Common assault: assault – actus reus and mens rea"},
+      {id:"cl_p2",text:"Common assault: battery – actus reus and mens rea"},
+      {id:"cl_p3",text:"s.47 OAPA 1861: actus reus and mens rea"},
+      {id:"cl_p4",text:"s.20 OAPA 1861: actus reus and mens rea"},
+      {id:"cl_p5",text:"s.18 OAPA 1861: actus reus and mens rea"},
+    ]},
+    {id:"cl_th",name:"Theft Offences",topics:[
+      {id:"cl_th1",text:"s.1 Theft Act 1968: definition of theft – actus reus and mens rea"},
+      {id:"cl_th2",text:"s.8 Theft Act 1968: robbery – actus reus and mens rea"},
+      {id:"cl_th3",text:"s.9 Theft Act 1968: burglary – actus reus and mens rea"},
+      {id:"cl_th4",text:"s.10 Theft Act 1968: aggravated burglary – actus reus and mens rea"},
+    ]},
+    {id:"cl_da",name:"Criminal Damage",topics:[
+      {id:"cl_d1",text:"Simple criminal damage: actus reus and mens rea"},
+      {id:"cl_d2",text:"Aggravated criminal damage: actus reus and mens rea"},
+      {id:"cl_d3",text:"Arson: actus reus and mens rea"},
+    ]},
+    {id:"cl_ho",name:"Homicide",topics:[
+      {id:"cl_h1",text:"Murder: actus reus and mens rea"},
+      {id:"cl_h2",text:"Voluntary manslaughter: loss of control"},
+      {id:"cl_h3",text:"Voluntary manslaughter: diminished responsibility"},
+      {id:"cl_h4",text:"Involuntary manslaughter: unlawful act manslaughter"},
+      {id:"cl_h5",text:"Involuntary manslaughter: manslaughter by gross negligence"},
+    ]},
+    {id:"cl_fr",name:"Fraud",topics:[
+      {id:"cl_fr1",text:"Fraud by false representation: actus reus and mens rea"},
+      {id:"cl_fr2",text:"Fraud by abuse of position: actus reus and mens rea"},
+      {id:"cl_fr3",text:"Fraud by failing to disclose: actus reus and mens rea"},
+    ]},
+    {id:"cl_de",name:"General Defences",topics:[
+      {id:"cl_def1",text:"Intoxication as a general defence"},
+      {id:"cl_def2",text:"Self-defence / defence of another"},
+    ]},
+    {id:"cl_pd",name:"Partial Defences",topics:[
+      {id:"cl_pd1",text:"Loss of control (partial defence)"},
+      {id:"cl_pd2",text:"Diminished responsibility (partial defence)"},
+    ]},
+    {id:"cl_pa",name:"Parties to an Offence",topics:[
+      {id:"cl_pa1",text:"Principal offender"},
+      {id:"cl_pa2",text:"Accomplices"},
+    ]},
+    {id:"cl_in",name:"Inchoate Offences",topics:[
+      {id:"cl_inc1",text:"Attempt to commit an offence"},
+    ]},
+  ]},
+  {id:"clp",name:"Criminal Law and Practice",color:"#6D28D9",sections:[
+    {id:"clp_po",name:"Rights at the Police Station",topics:[
+      {id:"clp_ps1",text:"Right to legal advice at the police station"},
+      {id:"clp_ps2",text:"Right to have someone informed of arrest"},
+      {id:"clp_ps3",text:"Reviews and detention time limits under PACE 1984, Code C"},
+    ]},
+    {id:"clp_id",name:"Identification Procedures",topics:[
+      {id:"clp_id1",text:"When an identification procedure must be held"},
+      {id:"clp_id2",text:"Different types of identification procedure"},
+      {id:"clp_id3",text:"Procedure for carrying out identification procedure under PACE 1984, Code D"},
+    ]},
+    {id:"clp_si",name:"Advising on Police Questions",topics:[
+      {id:"clp_s1",text:"Right to silence"},
+      {id:"clp_s2",text:"Adverse inferences from silence"},
+      {id:"clp_s3",text:"Role and appropriate conduct by defence legal representative including vulnerable clients"},
+      {id:"clp_s4",text:"Role of appropriate adult and who can be an appropriate adult"},
+    ]},
+    {id:"clp_ba",name:"Bail Applications",topics:[
+      {id:"clp_b1",text:"Right to bail and exceptions"},
+      {id:"clp_b2",text:"Conditional bail"},
+      {id:"clp_b3",text:"Procedure for applying for bail"},
+      {id:"clp_b4",text:"Further applications for bail"},
+      {id:"clp_b5",text:"Appeals against bail decisions"},
+      {id:"clp_b6",text:"Absconding and breaches of bail"},
+    ]},
+    {id:"clp_fh",name:"First Hearings before the Magistrates' Court",topics:[
+      {id:"clp_fh1",text:"Classification of offences"},
+      {id:"clp_fh2",text:"Applying for a representation order"},
+      {id:"clp_fh3",text:"Procedural overview of what happens at the first hearing"},
+      {id:"clp_fh4",text:"Role of the defence solicitor at the first hearing"},
+    ]},
+    {id:"clp_pv",name:"Plea Before Venue",topics:[
+      {id:"clp_pv1",text:"Procedure on defendant entering plea"},
+      {id:"clp_pv2",text:"Advising the client on trial venue"},
+    ]},
+    {id:"clp_al",name:"Allocation of Business",topics:[
+      {id:"clp_al1",text:"Procedure under ss.19-20 and s.22A Magistrates' Courts Act 1980"},
+      {id:"clp_al2",text:"Sending without allocation under s.50A and s.51 Crime and Disorder Act 1998"},
+    ]},
+    {id:"clp_cm",name:"Case Management and Pre-Trial Hearings",topics:[
+      {id:"clp_cm1",text:"Magistrates' court case management directions"},
+      {id:"clp_cm2",text:"Plea and Trial Preparation Hearing (Crown Court)"},
+      {id:"clp_cm3",text:"Disclosure: prosecution, defence and unused material"},
+    ]},
+    {id:"clp_ev",name:"Principles and Procedures to Admit and Exclude Evidence",topics:[
+      {id:"clp_ev1",text:"Burden and standard of proof"},
+      {id:"clp_ev2",text:"Visual identification evidence and Turnbull guidance"},
+      {id:"clp_ev3",text:"Inferences from silence under ss.34, 35, 36, 37, 38 CJPOA 1994"},
+      {id:"clp_ev4",text:"Hearsay evidence: definition and grounds for admitting"},
+      {id:"clp_ev5",text:"Confession evidence: definition and admissibility"},
+      {id:"clp_ev6",text:"Challenging admissibility under ss.76 and 78 PACE 1984"},
+      {id:"clp_ev7",text:"Bad character: definition and 7 gateways under s.101(1) CJA 2003"},
+      {id:"clp_ev8",text:"Bad character: 3 gateways under s.100(1) CJA 2003"},
+      {id:"clp_ev9",text:"Procedure for admitting bad character evidence"},
+      {id:"clp_ev10",text:"Court's powers to exclude bad character evidence"},
+      {id:"clp_ev11",text:"Exclusion of evidence: s.78 PACE and right to a fair trial"},
+    ]},
+    {id:"clp_tr",name:"Trial Procedure",topics:[
+      {id:"clp_tr1",text:"Burden and standard of proof at trial"},
+      {id:"clp_tr2",text:"Stages of a criminal trial including submission of no case to answer"},
+      {id:"clp_tr3",text:"Modes of address and courtroom etiquette"},
+      {id:"clp_tr4",text:"Difference between leading and non-leading questions"},
+      {id:"clp_tr5",text:"Competence and compellability of witnesses"},
+      {id:"clp_tr6",text:"Special measures for vulnerable witnesses"},
+      {id:"clp_tr7",text:"Solicitor's duty to the court"},
+    ]},
+    {id:"clp_se",name:"Sentencing",topics:[
+      {id:"clp_se1",text:"Role of sentencing guidelines"},
+      {id:"clp_se2",text:"Determining seriousness including aggravating and mitigating facts"},
+      {id:"clp_se3",text:"Concurrent and consecutive sentences"},
+      {id:"clp_se4",text:"Mitigation"},
+      {id:"clp_se5",text:"Custodial sentences"},
+      {id:"clp_se6",text:"Suspended sentences"},
+      {id:"clp_se7",text:"Community orders"},
+      {id:"clp_se8",text:"Newton hearings"},
+    ]},
+    {id:"clp_ap",name:"Appeals Procedure",topics:[
+      {id:"clp_ap1",text:"Appeals from magistrates' court: procedure for appeal against conviction and/or sentence"},
+      {id:"clp_ap2",text:"Powers of the Crown Court on appeal from magistrates'"},
+      {id:"clp_ap3",text:"Appeal to the High Court by way of case stated"},
+      {id:"clp_ap4",text:"Appeals from Crown Court: grounds of appeal"},
+      {id:"clp_ap5",text:"Appeals from Crown Court: procedure for making the appeal"},
+      {id:"clp_ap6",text:"Powers of the Court of Appeal"},
+    ]},
+    {id:"clp_yc",name:"Youth Court Procedure",topics:[
+      {id:"clp_yc1",text:"Youth court jurisdiction and grave crimes"},
+      {id:"clp_yc2",text:"Allocation in youth court"},
+      {id:"clp_yc3",text:"Youths jointly charged with an adult"},
+      {id:"clp_yc4",text:"Youth sentencing: role of Sentencing Children and Young People guidelines"},
+      {id:"clp_yc5",text:"Referral orders"},
+      {id:"clp_yc6",text:"Detention and training orders"},
+      {id:"clp_yc7",text:"Youth rehabilitation orders"},
+    ]},
+    {id:"clp_we",name:"Welsh Language",topics:[
+      {id:"clp_w1",text:"Preliminary considerations for use of Welsh language in criminal proceedings"},
+    ]},
+  ]},
+];
+
+const CASES={"plp_e4":["Hastingwood Property Ltd v Saunders Bearman Anselm [1991]"],"plp_e8":["Eccles v Bryant [1948]"],"plp_r1":["Raineri v Miles [1981]"],"plp_lc1":["Proudfoot v Hart (1890)","Ravenseft Properties Ltd v Davstone Holdings Ltd [1980]"],"plp_lc5":["United Scientific Holdings v Burnley BC [1978]"],"plp_lc6":["Bocardo SA v S&M Hotels Ltd [1980]"],"plp_lc7":["Mannai Investment Co v Eagle Star Assurance [1997]"],"plp_la3":["International Drilling Fluids v Louisville Investments [1986]"],"plp_la6":["Thames Manufacturing Co v Perrotts [1985]"],"plp_cov1":["Allied London Investments v Hambro Life Assurance (1984)"],"plp_cov2":["BHP Petroleum GB Ltd v Chesterfield Properties Ltd [2002]"],"plp_br2":["Billson v Residential Apartments Ltd [1992]","Shiloh Spinners v Harding [1973]"],"plp_br7":["Jervis v Harris [1996]"],"plp_t2":["Lyon v Reed (1844)"],"plp_541":["Graysim Holdings Ltd v P&O Property Holdings Ltd [1996]"],"plp_544":["Fisher v Taylor's Furnishing Stores [1956]","Fernandez v Walding [1968]"],"plp_545":["O'May v City of London Real Property Co Ltd [1983]"],"plp_pl1":["Cheshire CC v Woodward [1962]","Cardiff Rating Authority v Guest Keen Baldwin [1949]"],"plp_pl2":["Coleshill and District Investment Co v Minister of Housing [1969]"],"plp_tx8":["Goodwin v Curtis [1998]"],"wae_v1":["Banks v Goodfellow (1870)","Re Beaney [1978]"],"wae_v2":["Hall v Hall (1868)","Wingrove v Wingrove (1885)"],"wae_v3":["Re Colling [1972]","Re Groffman [1969]"],"wae_a1":["Re Shearn (1880)","Townson v Tickell (1819)"],"wae_rv1":["Re Jones [1976]"],"wae_rv2":["Re Seaford [1968]"],"wae_i1":["Re Sosted (1952)"],"wae_i2":["Hickman v Peacey [1945]","Re Whitrick [1957]"],"wae_ad2":["Re Vos [2006]"],"wae_752":["Re Coventry [1980]"],"wae_753":["Re Coventry [1980]","Ilott v The Blue Cross [2017]"],"ll_n3":["Walsh v Lonsdale (1882)"],"ll_n6":["Kinane v Mackie-Conteh [2005]","United Bank of Kuwait v Sahib [1997]"],"ll_t3":["Williams & Glyn's Bank v Boland [1981]"],"ll_t6":["Midland Bank Trust Co v Green [1981]"],"ll_t7":["Midland Bank Trust Co v Green [1981]","Kingsnorth Finance v Tizard [1986]"],"ll_co1":["Goodman v Gallant [1986]"],"ll_co3":["Nielsen-Jones v Fedden [1975]","Burgess v Rawnsley [1975]"],"ll_co4":["Re Buchanan-Wollaston's Conveyance [1939]","Bank of Ireland Home Mortgages v Bell [2001]"],"ll_pr1":["Re Ellenborough Park [1956]","Regency Villas Title Ltd v Diamond Resorts [2018]"],"ll_pr2":["Wheeldon v Burrows (1879)","P&S Platt Ltd v Crouch [2003]"],"ll_pr3":["Tulk v Moxhay (1848)","Rhone v Stephens [1994]"],"ll_pr4":["Cityland and Property (Holdings) Ltd v Dabrah [1968]"],"ll_pr6":["Cheltenham & Gloucester BS v Norgan [1996]","Palk v Mortgage Services Funding [1993]"],"ll_pr7":["Royal Bank of Scotland v Etridge (No 2) [2001]","Kreglinger v New Patagonia Meat Co [1914]"],"ll_l2":["Street v Mountford [1985]","AG Securities v Vaughan [1990]"],"ll_l4":["Spencer's Case (1583)"],"ll_l6":["Billson v Residential Apartments Ltd [1992]","Expert Clothing Service v Hillgate House [1986]"],"tr_c1":["Re Adams and the Kensington Vestry (1884)","Lambe v Eames (1871)"],"tr_c2":["McPhail v Doulton [1971]","Re Baden's Deed Trusts (No 2) [1973]"],"tr_c3":["Sprange v Barnard (1789)","Palmer v Simmonds (1854)"],"tr_c4":["IRC v Broadway Cottages [1955]","McPhail v Doulton [1971]"],"tr_c5":["Grey v IRC [1960]"],"tr_c6":["Milroy v Lord (1862)","Re Rose [1952]"],"tr_c7":["Re Ralli's Will Trust [1964]","Sen v Headley [1991]"],"tr_b5":["Saunders v Vautier (1841)"],"tr_ch1":["Incorporated Council of Law Reporting v AG [1972]","Re Resch's Will Trust [1969]"],"tr_rt1":["Westdeutsche Landesbank v Islington LBC [1996]"],"tr_rt2":["McGrath v Wallis [1995]","Pettitt v Pettitt [1970]"],"tr_fh1":["Stack v Dowden [2007]","Jones v Kernott [2011]"],"tr_fh2":["Lloyds Bank v Rosset [1991]","Stack v Dowden [2007]"],"tr_fh3":["Goodman v Gallant [1986]"],"tr_fh4":["Burns v Burns [1984]","Le Foe v Le Foe [2001]"],"tr_fh5":["Gillett v Holt [2001]","Thorner v Major [2009]"],"tr_st1":["BCCI v Akindele [2001]","Re Montagu's Settlement Trusts [1987]"],"tr_st2":["Royal Brunei Airlines v Tan [1995]","Twinsectra v Yardley [2002]"],"tr_fi1":["Boardman v Phipps [1967]","Keech v Sandford (1726)"],"tr_fi2":["Keech v Sandford (1726)"],"tr_fi3":["Aberdeen Railway Co v Blaikie Brothers (1854)"],"tr_tu2":["Learoyd v Whiteley (1887)","Re Whiteley (1886)"],"tr_tu3":["Nestle v National Westminster Bank [1993]","Cowan v Scargill [1985]"],"tr_tu5":["Pilkington v IRC [1964]"],"tr_tl1":["Target Holdings v Redferns [1996]"],"tr_tl2":["Target Holdings v Redferns [1996]","AIB Group v Mark Redler [2014]"],"tr_tl3":["Armitage v Nurse [1998]"],"tr_rem1":["Co-operative Insurance v Argyll Stores [1998]"],"tr_rem2":["Agip (Africa) Ltd v Jackson [1991]","Boscawen v Bajwa [1996]"],"cl_p1":["R v Ireland [1998]","Turbervell v Savage (1669)"],"cl_p2":["Collins v Wilcock [1984]","R v Brown [1994]"],"cl_p3":["R v Chan-Fook [1994]","R v Miller [1954]"],"cl_p4":["R v Savage [1992]","R v Parmenter [1992]"],"cl_p5":["R v Belfon [1976]","R v Nedrick [1986]"],"cl_th1":["R v Gomez [1993]","R v Hinks [2001]"],"cl_th2":["Corcoran v Anderton (1980)"],"cl_th3":["R v Collins [1973]","R v Brown [1985]"],"cl_d1":["R v Smith [1974]","Jaggard v Dickinson [1981]"],"cl_d2":["R v Steer [1988]"],"cl_h1":["R v Vickers [1957]","R v Woollin [1999]"],"cl_h2":["R v Dawes [2013]","R v Clinton [2012]"],"cl_h3":["R v Byrne [1960]","R v Dietschmann [2003]"],"cl_h4":["R v Church [1966]","R v Newbury and Jones [1977]"],"cl_h5":["R v Adomako [1995]"],"cl_fr1":["Ivey v Genting Casinos [2017]"],"cl_def1":["DPP v Majewski [1977]","R v Lipman [1970]"],"cl_def2":["R v Williams (Gladstone) [1984]","R v Clegg [1995]"],"cl_pd1":["R v Dawes [2013]","R v Clinton [2012]"],"cl_pd2":["R v Byrne [1960]","R v Dietschmann [2003]"],"cl_pa2":["R v Jogee [2016]"],"cl_inc1":["R v Gullefer [1990]","R v Jones [1990]"],"clp_ps1":["R v Samuel [1988]"],"clp_s2":["R v Condron [2000]"],"clp_ev2":["R v Turnbull [1977]"],"clp_ev3":["R v Condron [2000]","Murray v UK [1996]"],"clp_ev4":["R v Horncastle [2010]"],"clp_ev5":["R v Fulling [1987]","R v Paris, Abdullahi and Miller (1993)"],"clp_ev6":["R v Mason [1988]","R v Sang [1980]"],"clp_ev11":["R v Looseley [2001]"],"clp_tr2":["R v Galbraith [1981]"],"clp_tr5":["R v Barker [2010]"],"clp_se8":["R v Newton (1982)"]};
+const ALL=SUBJECTS.flatMap(s=>s.sections.flatMap(sec=>sec.topics));
+const TOTAL=ALL.length;
+const CC=["#1a1a3a","#EF4444","#F97316","#F59E0B","#84CC16","#22C55E"];
+
+let ST={};
+try{ST=JSON.parse(localStorage.getItem("sqe_flk2_v3")||"{}");}catch{}
+let VIEW="dashboard",SUBJ=SUBJECTS[0].id,OPENSEC={},OPENDET={},OPENCASES={},MID=null,MACT=null;
+
+function save(){try{localStorage.setItem("sqe_flk2_v3",JSON.stringify(ST));}catch{}}
+function td(id){return ST[id]||{confidence:0,activities:{}};}
+function cc(p){return p>60?"#22C55E":p>30?"#F59E0B":p>0?"#EF4444":"#2a2a5a";}
+function days(a,b){return Math.floor((b-a)/86400000);}
+function todayStr(){return new Date().toISOString().slice(0,10);}
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+
+function oConf(){const s=ALL.reduce((a,t)=>a+(ST[t.id]?.confidence||0),0);return Math.round(s/(TOTAL*5)*100);}
+function sConf(subj){const t=subj.sections.flatMap(s=>s.topics);const s=t.reduce((a,x)=>a+(ST[x.id]?.confidence||0),0);return Math.round(s/(t.length*5)*100);}
+function secConf(sec){const s=sec.topics.reduce((a,t)=>a+(ST[t.id]?.confidence||0),0);return Math.round(s/(sec.topics.length*5)*100);}
+function totSess(){let c=0;Object.values(ST).forEach(d=>ACTS.forEach(a=>c+=(d.activities?.[a.key]||[]).length));return c;}
+function topStart(){return ALL.filter(t=>ACTS.some(a=>(ST[t.id]?.activities?.[a.key]||[]).length>0)).length;}
+
+function updateHeader(){
+  const p=oConf();
+  document.getElementById("overall-pct").textContent=p+"%";
+  document.getElementById("overall-pct").style.color=cc(p);
+  document.getElementById("cpct-lbl").textContent=p+"%";
+  document.getElementById("cbar").style.width=p+"%";
+  const now=new Date(),el=Math.max(0,days(SD,now)),tot=days(SD,ED),rem=Math.max(0,days(now,ED)),tp=Math.min(100,Math.round(el/tot*100));
+  document.getElementById("tlbl").textContent=el+"/"+tot+" days ("+rem+" remaining)";
+  document.getElementById("tbar").style.width=tp+"%";
+  document.getElementById("hsub").textContent=SD.toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"})+" → "+ED.toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"})+" · "+TOTAL+" topic lines";
+}
+
+function showView(v){
+  VIEW=v;
+  document.querySelectorAll(".nav-btn").forEach(b=>{b.classList.toggle("active",b.textContent.toLowerCase()===v);});
+  document.getElementById("vdash").style.display=v==="dashboard"?"":"none";
+  document.getElementById("vmatrix").style.display=v==="matrix"?"":"none";
+  if(v==="dashboard")renderDash();
+  if(v==="matrix")renderMatrix();
+}
+
+function renderDash(){
+  const p=oConf(),now=new Date(),rem=Math.max(0,days(now,ED)),el=Math.max(0,days(SD,now)),tot=days(SD,ED),tp=Math.min(100,Math.round(el/tot*100));
+  const stats=[
+    {label:"Overall Confidence",value:p+"%",sub:TOTAL+" topic lines",color:cc(p)},
+    {label:"Topics Started",value:topStart(),sub:"of "+TOTAL,color:"#0EA5E9"},
+    {label:"Sessions Logged",value:totSess(),sub:"across all activities",color:"#10B981"},
+    {label:"Days Remaining",value:rem,sub:"of 122 total · "+tp+"% elapsed",color:"#F59E0B"},
+  ];
+  let h='<div class="stat-grid">';
+  stats.forEach(s=>{h+=`<div class="stat-card"><div class="stat-lbl">${s.label}</div><div class="stat-val" style="color:${s.color}">${s.value}</div><div class="stat-sub">${s.sub}</div></div>`;});
+  h+='</div><div class="sec-title">Subject Confidence Overview</div><div class="subj-grid">';
+  SUBJECTS.forEach(s=>{
+    const sp=sConf(s),ts=s.sections.flatMap(x=>x.topics),done=ts.filter(t=>(ST[t.id]?.confidence||0)>0).length;
+    h+=`<div class="subj-card" onclick="goSub('${s.id}')"><div class="subj-top"><div><div class="subj-name" style="color:${s.color}">${esc(s.name)}</div><div class="subj-s">${done} of ${ts.length} topics with confidence set</div></div><div class="subj-pct" style="color:${cc(sp)}">${sp}%</div></div><div class="pb-track"><div class="pb-fill" style="width:${sp}%;background:${s.color};opacity:.8"></div></div><div class="subj-hint">Click to open training matrix →</div></div>`;
+  });
+  h+='</div><div class="key-card"><div class="sec-title" style="margin-bottom:16px">Activity Key</div><div class="key-grid">';
+  ACTS.forEach(a=>{h+=`<div class="key-item"><div class="key-icon" style="background:${a.color}22;border:1px solid ${a.color}44">${a.icon}</div><div><div class="key-name">${a.label}</div><div class="key-s">${a.key==="mcq"?"Log with date, score and notes":"Log a session with date and notes"}</div></div></div>`;});
+  h+=`</div><div class="key-note">Confidence rated 0–5 per topic. Overall confidence = total scored ÷ (topics × 5) × 100%</div><div class="backup-row"><button class="exp-btn" onclick="exportData()">⬇ Export Progress</button><label class="imp-btn">⬆ Import Progress<input type="file" accept=".json" onchange="importData(event)" style="display:none"/></label></div></div>`;
+  document.getElementById("vdash").innerHTML=h;
+}
+
+function goSub(id){SUBJ=id;showView("matrix");}
+
+function renderMatrix(){
+  const subj=SUBJECTS.find(s=>s.id===SUBJ)||SUBJECTS[0];
+  const ts=subj.sections.flatMap(s=>s.topics),sp=Math.round(ts.reduce((a,t)=>a+(ST[t.id]?.confidence||0),0)/(ts.length*5)*100);
+  let h='<div id="stabs">';
+  SUBJECTS.forEach(s=>{const ac=s.id===SUBJ;h+=`<button class="stab" style="${ac?`color:${s.color};border-color:${s.color};background:${s.color}22`:""}" onclick="switchSub('${s.id}')">${esc(s.name.split(" ").slice(0,3).join(" "))}</button>`;});
+  h+=`</div><div id="mhdr"><div><div id="mtitle" style="color:${subj.color}">${esc(subj.name)}</div><div id="msub">${ts.length} topic lines · ${sp}% confident</div></div><div id="mpct" style="color:${cc(sp)}">${sp}%</div></div><div id="scon">`;
+  subj.sections.forEach(sec=>{h+=renderSec(sec,subj.color);});
+  h+='</div>';
+  document.getElementById("vmatrix").innerHTML=h;
+}
+
+function renderSec(sec,color){
+  const isO=OPENSEC[sec.id]!==false,sp=secConf(sec);
+  let h=`<div class="secblock" id="sb-${sec.id}"><button class="sechdr${isO?" open":""}" onclick="togSec('${sec.id}')"><span>${esc(sec.name)}</span><div class="sechr"><span style="font-size:12px;color:${cc(sp)}">${sp}%</span><span style="color:#4a4a7a;font-size:16px">${isO?"▲":"▼"}</span></div></button>`;
+  if(isO){h+='<div class="sectopics">';sec.topics.forEach((t,i)=>{h+=renderRow(t,i,sec.topics.length,color);});h+='</div>';}
+  h+='</div>';return h;
+}
+
+function renderRow(t,idx,total,color){
+  const d=td(t.id),conf=d.confidence||0,acts=d.activities||{},actC=ACTS.reduce((a,at)=>a+(acts[at.key]||[]).length,0),isD=OPENDET[t.id],bg=idx%2===0?"#0E0E22":"#0A0A1A";
+  let cb='<div class="cgrp"><span class="clbl">Conf:</span>';
+  for(let n=1;n<=5;n++){cb+=`<button class="cbtn" style="background:${conf>=n?CC[n]:"#1a1a3a"};opacity:${conf>=n?1:0.4}" onclick="setC('${t.id}',${n})">${n}</button>`;}
+  cb+='</div>';
+  let ab='<div class="agrp">';
+  ACTS.forEach(at=>{const lg=(acts[at.key]||[]).length;ab+=`<button class="abtn" title="${at.label} (${lg})" style="border-color:${lg>0?at.color+"66":"#1a1a3a"};background:${lg>0?at.color+"22":"transparent"}" onclick="openM('${t.id}','${at.key}')">${at.icon}${lg>0?`<span class="abadge" style="background:${at.color}">${lg}</span>`:""}</button>`;});
+  ab+='</div>';
+  let det='';
+  if(isD&&actC>0){
+    det='<div class="tdetail">';
+    ACTS.filter(at=>(acts[at.key]||[]).length>0).forEach(at=>{
+      det+=`<div class="dlbl" style="color:${at.color}">${at.icon} ${at.label} sessions:</div>`;
+      (acts[at.key]||[]).forEach((e,i)=>{det+=`<div class="dentry"><span>${esc(e.date)}${e.score?" · "+esc(e.score):""}${e.note?" – "+esc(e.note):""}</span><button class="ddel" onclick="delA('${t.id}','${at.key}',${i})">×</button></div>`;});
+    });
+    det+='</div>';
+  }
+    // cases panel
+  const tc=CASES[t.id]||[];
+  let cpanel='';
+  if(tc.length>0){
+    const isC=OPENCASES[t.id];
+    cpanel=`<div class="cases-panel"><button class="cases-toggle" onclick="togCases('${t.id}')">${isC?'▾':'▸'} Key Cases (${tc.length})</button>`;
+    if(isC){
+      cpanel+='<div class="cases-list">';
+      tc.forEach(cs=>{cpanel+=`<div class="case-item">${esc(cs)}</div>`;});
+      cpanel+='</div>';
+    }
+    cpanel+='</div>';
+  }
+  return `<div class="trow" id="row-${t.id}" style="background:${bg}${idx<total-1?";border-bottom:1px solid #1a1a3a":""}"><div class="trow-main"><div class="ttext" onclick="togDet('${t.id}')">${esc(t.text)}</div>${cb}${ab}</div>${det}${cpanel}</div>`;
+}
+
+function setC(id,v){const d=td(id);d.confidence=(d.confidence===v)?0:v;ST[id]=d;save();rerenderRow(id);updateHeader();if(VIEW==="dashboard")renderDash();}
+function delA(id,key,i){const d=td(id);d.activities[key].splice(i,1);ST[id]=d;save();rerenderRow(id);if(VIEW==="dashboard")renderDash();}
+function togSec(id){OPENSEC[id]=OPENSEC[id]===false;const subj=SUBJECTS.find(s=>s.sections.some(sec=>sec.id===id));const sec=subj?.sections.find(sec=>sec.id===id);if(!sec)return;const el=document.getElementById("sb-"+id);if(el)el.outerHTML=renderSec(sec,subj.color);}
+function togDet(id){OPENDET[id]=!OPENDET[id];rerenderRow(id);}
+function switchSub(id){SUBJ=id;renderMatrix();}
+function togCases(id){OPENCASES[id]=!OPENCASES[id];rerenderRow(id);}
+
+function rerenderRow(id){
+  const el=document.getElementById("row-"+id);if(!el)return;
+  const subj=SUBJECTS.find(s=>s.sections.some(sec=>sec.topics.some(t=>t.id===id)));
+  const sec=subj?.sections.find(sec=>sec.topics.some(t=>t.id===id));if(!sec)return;
+  const t=sec.topics.find(t=>t.id===id),i=sec.topics.indexOf(t);
+  el.outerHTML=renderRow(t,i,sec.topics.length,subj.color);
+  const sb=document.getElementById("sb-"+sec.id);
+  if(sb){const sp=secConf(sec);const pEl=sb.querySelector(".sechr span");if(pEl){pEl.textContent=sp+"%";pEl.style.color=cc(sp);}}
+  const mp=document.getElementById("mpct"),ms=document.getElementById("msub");
+  if(mp&&ms){const subj2=SUBJECTS.find(s=>s.id===SUBJ);if(subj2){const ts=subj2.sections.flatMap(s=>s.topics),sp2=Math.round(ts.reduce((a,t2)=>a+(ST[t2.id]?.confidence||0),0)/(ts.length*5)*100);mp.textContent=sp2+"%";mp.style.color=cc(sp2);ms.textContent=ts.length+" topic lines · "+sp2+"% confident";}}
+}
+
+function openM(topicId,actKey){
+  MID=topicId;MACT=actKey;
+  const act=ACTS.find(a=>a.key===actKey),topic=ALL.find(t=>t.id===topicId);
+  document.getElementById("mtlbl").textContent=act.icon+" Log "+act.label+" Session";
+  document.getElementById("mtlbl").style.color=act.color;
+  document.getElementById("mtopic").textContent=topic.text;
+  document.getElementById("mdate").value=todayStr();
+  document.getElementById("mscore").value="";
+  document.getElementById("mnote").value="";
+  document.getElementById("mscore-grp").style.display=actKey==="mcq"?"":"none";
+  document.getElementById("mnote").placeholder=actKey==="mcq"?"e.g. Kaplan practice set, weak on mens rea...":"e.g. Listened to lecture, completed flashcards...";
+  document.getElementById("mok").style.background=act.color;
+  renderPrev();
+  document.getElementById("moverlay").classList.add("show");
+}
+
+function renderPrev(){
+  const d=td(MID),ex=d.activities?.[MACT]||[];
+  if(!ex.length){document.getElementById("mprev").innerHTML="";return;}
+  let h='<div class="prevlbl">PREVIOUS SESSIONS</div>';
+  ex.forEach((e,i)=>{h+=`<div class="prevrow"><span>${esc(e.date)}${e.score?" · "+esc(e.score):""}${e.note?" – "+esc(e.note):""}</span><button class="prevdel" onclick="delAModal(${i})">×</button></div>`;});
+  document.getElementById("mprev").innerHTML=h;
+}
+
+function delAModal(i){const d=td(MID);d.activities[MACT].splice(i,1);ST[MID]=d;save();rerenderRow(MID);renderPrev();if(VIEW==="dashboard")renderDash();}
+function submitLog(){const date=document.getElementById("mdate").value;if(!date)return;const note=document.getElementById("mnote").value.trim(),score=document.getElementById("mscore").value.trim();const d=td(MID);if(!d.activities[MACT])d.activities[MACT]=[];d.activities[MACT].push({date,note,score});ST[MID]=d;save();rerenderRow(MID);closeModal();if(VIEW==="dashboard")renderDash();}
+function closeModal(){document.getElementById("moverlay").classList.remove("show");MID=null;MACT=null;}
+
+
+function exportData(){
+  const blob=new Blob([JSON.stringify(ST,null,2)],{type:"application/json"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="sqe_flk2_progress_"+todayStr()+".json";
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+function importData(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(ev){
+    try{
+      const imported=JSON.parse(ev.target.result);
+      if(typeof imported!=="object"||Array.isArray(imported))throw new Error("Invalid");
+      ST=imported;save();updateHeader();
+      if(VIEW==="dashboard")renderDash();else renderMatrix();
+      alert("Progress imported successfully!");
+    }catch{alert("Could not read file. Make sure it is a valid export from this app.");}
+  };
+  reader.readAsText(file);
+  e.target.value="";
+}
+updateHeader();renderDash();
+</script>
+</body>
+</html>
